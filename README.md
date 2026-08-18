@@ -138,3 +138,50 @@ Pridėtas bulk upload:
 - nepavykusių PDF klaidos rodomos prie konkretaus failo;
 - klaidų sąrašą galima atsisiųsti kaip `conversion_errors.txt`;
 - konverterio logika liko v5: mažų sąskaitų fallback + Customer PO su tarpais.
+
+
+## Versija v7
+
+Pridėtas slaptažodis web versijai:
+
+- jei `APP_PASSWORD` nėra nustatytas, lokalus įrankis veikia be slaptažodžio;
+- Streamlit Cloud reikia įrašyti secret:
+  `APP_PASSWORD = "tavo_slaptažodis"`
+- slaptažodis nelaikomas kode;
+- bulk upload funkcija iš v6 palikta;
+- konverterio logika liko v5/v6: mažų sąskaitų fallback + Customer PO su tarpais.
+
+### Streamlit Cloud Secrets
+
+Streamlit Cloud:
+
+1. Atidaryk app valdymą.
+2. Eik į Settings / Secrets.
+3. Įrašyk:
+
+```toml
+APP_PASSWORD = "tavo_sugalvotas_slaptazodis"
+```
+
+4. Save.
+5. Reboot / rerun app.
+
+### GitHub
+
+Į GitHub kelti šiuos failus:
+
+- `app.py`
+- `converter_511_invoice.py`
+- `requirements.txt`
+- `README.md`
+
+Nekelti PDF sąskaitų, Excel failų, ZIP rezultatų ir `__pycache__`.
+
+
+## Versija v8
+
+Pataisyta lokalaus paleidimo klaida:
+
+- v7 lokaliai mesdavo `StreamlitSecretNotFoundError`, jeigu nebuvo `.streamlit/secrets.toml`;
+- v8 lokaliai veikia be slaptažodžio, jeigu secrets failo nėra;
+- Streamlit Cloud aplinkoje slaptažodis veikia per `APP_PASSWORD` secret.

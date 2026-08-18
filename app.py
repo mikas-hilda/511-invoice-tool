@@ -11,6 +11,43 @@ from converter_511_invoice import convert_invoice_pdf, InvoiceConversionError
 
 st.set_page_config(page_title="5.11 Invoice PDF → Excel", layout="centered")
 
+
+def require_password() -> None:
+    """
+    Simple access gate for Streamlit Cloud.
+
+    Cloud usage:
+    Add APP_PASSWORD in Streamlit Cloud -> App settings -> Secrets.
+
+    Local usage:
+    If no secrets.toml exists, the app runs without asking for a password.
+    """
+    try:
+        app_password = st.secrets.get("APP_PASSWORD", "")
+    except Exception:
+        app_password = ""
+
+    if not app_password:
+        return
+
+    if st.session_state.get("authenticated") is True:
+        return
+
+    st.title("5.11 Invoice PDF → Excel")
+    password = st.text_input("Slaptažodis", type="password")
+
+    if password == app_password:
+        st.session_state["authenticated"] = True
+        st.rerun()
+
+    if password:
+        st.error("Neteisingas slaptažodis.")
+
+    st.stop()
+
+
+require_password()
+
 st.title("5.11 Invoice PDF → Excel")
 st.write(
     "Įkelk vieną arba kelias 5.11 PDF sąskaitas. "
